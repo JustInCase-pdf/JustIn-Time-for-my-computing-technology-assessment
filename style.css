@@ -30,9 +30,9 @@ body { background-color: var(--bg-color); width: 100vw; height: 100vh; overflow:
 #app-container { width: 100%; height: 100%; background-color: var(--bg-color); position: relative; display: flex; flex-direction: column; }
 
 /* --- LANDING PAGE STYLES --- */
-#landing-header { display: flex; justify-content: space-between; align-items: center; padding: 30px 40px; border-bottom: 1px solid var(--border); width: 100%; background: var(--card-bg); }
+#landing-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 40px; border-bottom: 1px solid var(--border); width: 100%; background: var(--card-bg); }
 .landing-left { display: flex; align-items: center; gap: 40px; }
-.landing-left img { height: 45px; cursor: pointer; }
+.landing-left img { height: 100px; cursor: pointer; }
 .landing-links { display: flex; gap: 30px; font-weight: 700; color: var(--text-muted); }
 .landing-links a { color: inherit; text-decoration: none; cursor: pointer; transition: 0.2s; }
 .landing-links a:hover { color: var(--text-main); }
