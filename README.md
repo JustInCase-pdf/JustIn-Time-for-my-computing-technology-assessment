@@ -6,7 +6,7 @@ Justin Huynh's Computing Technology Assessment
 - For a Student, the email prefix should be "@education.nsw.gov.au"
 - For a Teacher, the email prefix should be "@det.nsw.edu.au"
 - For a staff member, the email prefix should be "@centralbox.com"
-**These email prefixes are PRE-REGISTERED. Thus, using the password "CVHS" to login.**
+- **These email prefixes are PRE-REGISTERED. Thus, using the password "CVHS" to login.**
 - For a parent, every other email prefix will work. However, they will have to sign up.
 
 Additionally, depending on what version of the site the user is on, some features are added or removed.
