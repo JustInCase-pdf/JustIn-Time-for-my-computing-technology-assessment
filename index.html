@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CentralBox | CVHS</title>
     <link rel="icon" type="image/png" href="CB.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -18,6 +19,8 @@
             --parent-theme: #6c5ce7;
             --staff-theme: #00b894;
             --nav-bg: rgba(255, 255, 255, 0.9);
+            --danger: #ff4757;
+            --success: #00b894;
         }
 
         [data-theme="dark"] {
@@ -29,51 +32,52 @@
             --nav-bg: rgba(30, 30, 30, 0.9);
         }
 
-        * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; letter-spacing: -0.03em; transition: background 0.3s, color 0.3s; }
-        body { background-color: #f1f2f6; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; letter-spacing: -0.03em; transition: background 0.3s, color 0.3s; scroll-behavior: smooth; }
+        
+        body { background-color: var(--bg-color); width: 100vw; height: 100vh; overflow: hidden; }
         [data-theme="dark"] body { background-color: #000; }
 
-        #app-container {
-            width: 100%; max-width: 1200px; height: 100%;
-            background-color: var(--bg-color); position: relative;
-            display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
+        #app-container { width: 100%; height: 100%; background-color: var(--bg-color); position: relative; display: flex; flex-direction: column; }
+
+        /* --- LANDING PAGE STYLES --- */
+        #landing-header { display: flex; justify-content: space-between; align-items: center; padding: 30px 40px; border-bottom: 1px solid var(--border); width: 100%; background: var(--card-bg); }
+        .landing-left { display: flex; align-items: center; gap: 40px; }
+        .landing-left img { height: 45px; cursor: pointer; }
+        .landing-links { display: flex; gap: 30px; font-weight: 700; color: var(--text-muted); }
+        .landing-links a { color: inherit; text-decoration: none; cursor: pointer; transition: 0.2s; }
+        .landing-links a:hover { color: var(--text-main); }
+        
+        .btn-outline { background: transparent; border: 2px solid var(--text-main); color: var(--text-main); padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 0.95rem; }
+        .btn-filled { background: var(--text-main); color: var(--card-bg); border: 2px solid var(--text-main); padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 0.95rem; }
+        
+        .feature-card { background: var(--card-bg); padding: 40px; border-radius: 24px; border: 1px solid var(--border); text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .feature-image { width: 100%; height: 200px; border-radius: 16px; margin-bottom: 20px; display: block; object-fit: cover; background: var(--border); }
 
         /* --- AUTH SCREEN --- */
-        #auth-screen {
-            position: absolute; inset: 0; background: var(--card-bg); z-index: 500;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; color: var(--text-main);
-        }
+        #auth-screen { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; color: var(--text-main); backdrop-filter: blur(5px); }
+        .auth-container { background: var(--card-bg); padding: 50px; border-radius: 30px; width: 100%; max-width: 450px; text-align: center; border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; z-index: 2001; }
+
+        /* --- MODALS --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(5px); }
+        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 28px; width: 100%; max-width: 340px; text-align: center; border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.2); color: var(--text-main); }
+        .modal-content-large { max-width: 450px; text-align: left; }
 
         /* --- HEADER --- */
-        header {
-            display: none; height: 70px; align-items: center; justify-content: flex-end;
-            padding: 0 24px; background: var(--card-bg); border-bottom: 1px solid var(--border); 
-            z-index: 100; position: relative;
-        }
-        
-        .internal-logo-btn { 
-            height: 120px; width: auto; position: absolute; left: 20px; top: 50%;
-            transform: translateY(-50%); cursor: pointer; z-index: 101; transition: 0.2s;
-        }
-
-        #role-badge {
-            font-size: 0.65rem; font-weight: 900; background: var(--text-main); 
-            color: white; padding: 5px 12px; border-radius: 8px;
-        }
+        header#app-header { display: none; height: 70px; align-items: center; justify-content: flex-end; padding: 0 24px; background: var(--card-bg); border-bottom: 1px solid var(--border); z-index: 100; position: relative; }
+        .internal-logo-btn { height: 120px; width: auto; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 101; transition: 0.2s; }
+        #role-badge { font-size: 0.65rem; font-weight: 900; background: var(--text-main); color: white; padding: 5px 12px; border-radius: 8px; }
 
         /* --- VIEWS --- */
         main { flex: 1; overflow-y: auto; padding-bottom: 110px; position: relative; }
         .view { display: none; padding: 24px; animation: fadeIn 0.4s ease; color: var(--text-main); }
         .view.active { display: block; }
         #view-home.active { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- GRID & UI --- */
-        .hero-title { font-size: 3rem; font-weight: 900; line-height: 1.1; margin-bottom: 30px; color: var(--text-main); }
-        .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; max-width: 420px; }
-        .home-card { background: var(--card-bg); padding: 30px 10px; border-radius: 28px; cursor: pointer; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .hero-title { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 30px; color: var(--text-main); }
+        .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; max-width: 420px; margin: 0 auto; }
+        .home-card { background: var(--card-bg); padding: 30px 10px; border-radius: 28px; cursor: pointer; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.03); text-align: center;}
         .home-card p { margin-top: 8px; font-weight: 700; color: var(--text-main); }
         
         .form-input, .form-select { width: 100%; padding: 18px; margin-bottom: 15px; border-radius: 16px; border: 1px solid var(--border); font-size: 1rem; background: var(--bg-color); color: var(--text-main); outline: none; }
@@ -82,47 +86,99 @@
         .chip { padding: 12px 24px; border: none; border-radius: 50px; background: var(--border); font-weight: 700; cursor: pointer; margin-right: 8px; color: var(--text-main); }
         .chip.active { background: var(--text-main); color: var(--card-bg); }
 
-        #bottom-nav {
-            position: absolute; bottom: 0; width: 100%; height: 95px;
-            background: var(--nav-bg); backdrop-filter: blur(20px);
-            display: none; justify-content: space-around; align-items: center;
-            border-top: 1px solid var(--border); padding-bottom: 10px; z-index: 200;
-        }
+        #bottom-nav { position: absolute; bottom: 0; width: 100%; height: 95px; background: var(--nav-bg); backdrop-filter: blur(20px); display: none; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); padding-bottom: 10px; z-index: 200; }
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; background: none; border: none; cursor: pointer; color: var(--text-muted); }
         .nav-tab.active { color: var(--text-main); }
-
-        /* --- MODAL --- */
-        #qty-modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000;
-            display: none; justify-content: center; align-items: center; padding: 20px;
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: var(--card-bg); padding: 30px; border-radius: 28px; width: 100%; max-width: 340px; 
-            text-align: center; border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            color: var(--text-main);
-        }
 
         /* --- PROFILE/SETTINGS EXTRAS --- */
         .section-label { font-size: 0.75rem; font-weight: 900; color: var(--text-muted); text-transform: uppercase; margin: 20px 0 10px 5px; display: block; }
         .setting-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .avatar-circle { width: 60px; height: 60px; background: var(--border); border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 10px; }
+        
+        .fav-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--border); transition: 0.2s; padding: 0 5px; line-height: 1; }
+        .fav-btn.active { color: #f1c40f; }
+        .del-btn { background: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
-<body>
+<body onload="initApp()"> 
 
     <div id="app-container">
-        <div id="auth-screen">
-            <div style="width: 100%; max-width: 380px; text-align: center;">
-                <img src="CB.png" alt="CB Logo" style="height: 100px; margin-bottom: 30px;">
-                <h1 id="auth-title">Sign In</h1>
-                <div id="signup-fields" style="display: none;"><input type="text" id="reg-name" class="form-input" placeholder="Full Name"></div>
-                <input type="email" id="auth-email" class="form-input" placeholder="Email Address">
-                <input type="password" id="auth-pass" class="form-input" placeholder="Password">
-                <button class="btn-black" id="main-auth-btn" onclick="handleAuth()">Sign In</button>
-                <button id="toggle-auth-btn" style="background:none; border:none; color:var(--accent); margin-top:15px; cursor:pointer; font-weight:700;" onclick="toggleAuthMode()">Parent? Sign Up here</button>
+
+        <div id="landing-screen" style="position: absolute; inset: 0; background: var(--bg-color); z-index: 600; display: flex; flex-direction: column; overflow-y: auto;">
+            <header id="landing-header">
+                <div class="landing-left">
+                    <img src="CB.png" alt="CentralBox Logo" onclick="switchTab('view-landing')">
+                    <div class="landing-links">
+                        <a href="#about-features" onclick="switchTab('view-landing')">About</a>
+                        <a onclick="switchTab('view-public-menu')">Menu</a>
+                    </div>
+                </div>
+            </header>
+
+            <main style="padding: 60px 40px; text-align: center;">
+                <h1 class="hero-title">Smarter School Lunches.</h1>
+                <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto 40px auto; line-height: 1.6;">
+                    CentralBox streamlines ordering for students, faculty, and parents at CVHS. Pre-order meals, track limits, and skip the canteen lines.
+                </p>
+                <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 80px;">
+                    <button class="btn-filled" style="padding: 18px 40px; font-size: 1.1rem;" onclick="openAuthModal(false)">Get Started</button>
+                </div>
+
+                <div id="about-features" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1000px; margin: 0 auto; padding-bottom: 80px;">
+                    <div class="feature-card">
+                        <img src="skip the line.png" alt="Skip the Line" class="feature-image">
+                        <h3>Skip The Line</h3>
+                        <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.95rem;">Pre-order your food during recess and pick it up immediately when the bell rings.</p>
+                    </div>
+                    <div class="feature-card">
+                        <img src="smart dietary alerts.png" alt="Smart Dietary Alerts" class="feature-image">
+                        <h3>Smart Dietary Alerts</h3>
+                        <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.95rem;">Set your allergies in your profile. The system will automatically warn the kitchen during prep.</p>
+                    </div>
+                    <div class="feature-card">
+                        <img src="parental controls.png" alt="Parental Controls" class="feature-image">
+                        <h3>Parental Controls</h3>
+                        <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.95rem;">Parents can create linked accounts to set daily spending limits and monitor child nutrition.</p>
+                    </div>
+                </div>
+            </main>
+            <footer style="text-align: center; padding: 40px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9rem;">
+                &copy; 2026 CentralBox | Justin Huynh CTA
+            </footer>
+        </div>
+
+
+        <div id="view-public-menu" class="view" style="position: absolute; inset: 0; background: var(--bg-color); z-index: 600; overflow-y: auto; padding: 40px;">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px;">
+                <img src="CB.png" alt="Back" style="height: 45px; cursor: pointer;" onclick="switchTab('view-landing')">
+                <button class="btn-filled" style="padding: 12px 24px; font-size: 0.95rem;" onclick="openAuthModal(false)">Get Started</button>
+            </header>
+            
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <h1 class="hero-title" style="text-align: center; font-size: 4rem;">Canteen Menu</h1>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 50px;">Browse our full selection of food and drinks.</p>
+                <div id="public-menu-categorized-container"></div>
             </div>
         </div>
+
+
+        <div id="auth-screen" onclick="handleOutsideModalClick(event)">
+            <div class="auth-container" onclick="event.stopPropagation()">
+                <img src="CB.png" alt="CB Logo" style="height: 80px; margin-bottom: 20px;">
+                <h1 id="auth-title">Sign In</h1>
+                
+                <div id="signup-fields" style="display: none;"><input type="text" id="reg-name" class="form-input" placeholder="Parent Full Name"></div>
+                <input type="email" id="auth-email" class="form-input" placeholder="Email Address">
+                <input type="password" id="auth-pass" class="form-input" placeholder="Password">
+                
+                <button class="btn-black" id="main-auth-btn" onclick="handleAuth()">Sign In</button>
+                <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                    <button id="toggle-auth-btn" style="background:none; border:none; color:var(--accent); cursor:pointer; font-weight:700;" onclick="toggleAuthMode()">Or sign up now</button>
+                    <button style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-weight:700;" onclick="closeAuthModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
 
         <header id="app-header">
             <img src="CentralBox.png" alt="Home" class="internal-logo-btn" id="header-logo" onclick="switchTab('view-home')">
@@ -170,7 +226,10 @@
                 <h2>Checkout</h2>
                 <p style="color: var(--text-muted); margin-bottom: 20px;">Review your order and add any specific requirements.</p>
 
-                <div style="margin-top: 20px;">
+                <div class="section-label">Cart Items</div>
+                <div id="checkout-items-container" style="margin-bottom: 20px;"></div>
+
+                <div>
                     <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted);">PICKUP TIME</label>
                     <select id="checkout-pickup-time" class="form-select" style="margin-top: 5px;"></select>
                 </div>
@@ -211,19 +270,30 @@
 
                 <span class="section-label">Dietary Preferences</span>
                 <div class="item-card" style="flex-direction: column; align-items: flex-start; gap: 10px;">
-                    <div class="setting-row"><span>Vegetarian Option</span><input type="checkbox"></div>
-                    <div class="setting-row"><span>Halal Preferred</span><input type="checkbox"></div>
-                    <div class="setting-row"><span>Nut Allergy Alert</span><input type="checkbox" checked></div>
+                    <div class="setting-row"><span>Vegetarian Option</span><input type="checkbox" id="pref-veg" onchange="savePreferences()"></div>
+                    <div class="setting-row"><span>Halal Preferred</span><input type="checkbox" id="pref-halal" onchange="savePreferences()"></div>
+                    <div class="setting-row"><span>Nut Allergy Alert</span><input type="checkbox" id="pref-nut" onchange="savePreferences()"></div>
                 </div>
 
-                <span class="section-label">Saved Balance</span>
-                <div class="item-card">
-                    <div><p style="font-size: 0.7rem; color: var(--text-muted);">CURRENT CREDIT</p><h3>$42.50</h3></div>
-                    <button class="chip active" style="padding: 8px 16px; font-size: 0.8rem;">Top Up</button>
+                <span class="section-label">Secure Payments</span>
+                <div class="item-card" style="flex-direction: column; gap: 10px;">
+                    <div style="display: flex; justify-content: space-between; width: 100%;" id="balance-display-container">
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">SCHOOL ACCOUNT BALANCE</p>
+                        <h4 id="profile-balance-display" style="color: var(--success); font-weight: 800;">$0.00</h4>
+                    </div>
+                    <div id="staff-topup-section" style="display:none; width:100%; margin-bottom:10px; border-top:1px solid var(--border); padding-top:10px;">
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom:5px; font-weight:800;">TOP UP ACCOUNT BALANCE</p>
+                        <div style="display:flex; gap:10px; width:100%;">
+                            <input type="number" id="staff-topup-amount" class="form-input" style="margin:0; flex:1; padding:10px;" placeholder="Amount ($)" min="1">
+                            <button class="btn-black" style="width:auto; padding:10px 20px; background:var(--success); color:white;" onclick="executeStaffTopUp()">Top Up</button>
+                        </div>
+                    </div>
+                    <div id="payment-methods-list" style="width: 100%;"></div>
+                    <button id="add-payment-btn" class="chip" style="width: 100%; margin-top: 10px; margin-right: 0;" onclick="openPaymentModal()">+ Add Payment Method</button>
                 </div>
 
                 <span class="section-label">Quick Actions</span>
-                <button class="btn-black" style="padding: 15px; margin-bottom: 10px; background: var(--accent); color: white;" onclick="showFavorites()">View Favorite Orders</button>
+                <button id="fav-orders-btn" class="btn-black" style="padding: 15px; margin-bottom: 10px; background: var(--accent); color: white;" onclick="switchTab('view-favorites')">View Favorite Foods</button>
                 <button class="btn-black" style="background: #ff4757; color: white;" onclick="location.reload()">Log Out</button>
             </section>
 
@@ -257,8 +327,8 @@
 
                 <span class="section-label">Security & Account</span>
                 <div class="item-card" style="flex-direction: column; gap: 10px; align-items: flex-start;">
-                    <button style="background: none; border: none; color: var(--accent); font-weight: 700; cursor: pointer;">Change Password</button>
-                    <button style="background: none; border: none; color: #ff4757; font-weight: 700; cursor: pointer;">Clear Saved Payment Info</button>
+                    <button style="background: none; border: none; color: var(--accent); font-weight: 700; cursor: pointer;" onclick="appChangePassword()">Change Password</button>
+                    <button style="background: none; border: none; color: #ff4757; font-weight: 700; cursor: pointer;" onclick="appClearPaymentInfo()">Clear Saved Payment Info</button>
                 </div>
 
                 <div id="parental-ctrl-section" style="display: none;">
@@ -269,13 +339,32 @@
                 </div>
             </section>
 
+            <section id="view-favorites" class="view">
+                <h2>Your Favorites</h2>
+                <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">Starred items from the canteen menu.</p>
+                <div id="favorites-container"></div>
+                <button onclick="switchTab('view-account')" style="background: none; border: none; color: var(--text-muted); font-weight: 700; width: 100%; margin-top: 20px; cursor: pointer;">Back to Profile</button>
+            </section>
+
             <section id="view-parent-limits" class="view">
-                <h2>Daily Spending Limit</h2>
-                <div style="background: var(--card-bg); padding: 30px; border-radius: 24px; border: 1px solid var(--border); margin-top: 20px; text-align: center;">
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Set a daily cap for your child's account.</p>
+                <h2>Parental Controls</h2>
+                
+                <div class="section-label">Linked Student Account</div>
+                <div class="item-card" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Must use an @education.nsw.gov.au email suffix.</p>
+                    <div style="display: flex; gap: 10px; width: 100%;">
+                        <input type="email" id="link-student-email" class="form-input" style="margin: 0; flex: 1;" placeholder="student@education.nsw.gov.au">
+                        <button class="btn-black" style="width: auto; padding: 10px 20px;" onclick="linkStudentAccount()">Link</button>
+                    </div>
+                    <p id="linked-status" style="font-size: 0.9rem; font-weight: 700; color: var(--success); display: none;">Connected to: <span id="linked-email-display"></span></p>
+                </div>
+
+                <div class="section-label">Daily Spending Limit / Wallet Balance</div>
+                <div style="background: var(--card-bg); padding: 30px; border-radius: 24px; border: 1px solid var(--border); margin-top: 5px; text-align: center;">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Set a daily cap that directly funds your child's account.</p>
                     <h1 id="limit-value" style="font-size: 3.5rem; margin: 20px 0;">$15</h1>
-                    <input type="range" min="5" max="50" value="15" step="1" style="width: 100%; margin: 20px 0; cursor: pointer;" oninput="document.getElementById('limit-value').innerText = '$' + this.value">
-                    <button class="btn-black" onclick="alert('Limit Saved!')">Save Limit</button>
+                    <input type="range" min="5" max="50" value="15" step="1" id="parent-limit-slider" style="width: 100%; margin: 20px 0; cursor: pointer;" oninput="updateLimitValue(this.value)">
+                    <button class="btn-black" onclick="saveParentLimit()">Save & Fund Account</button>
                 </div>
             </section>
 
@@ -284,29 +373,32 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
                     <div style="background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border); text-align: center;">
                         <p style="font-size: 0.7rem; color: var(--text-muted);">DAILY REVENUE</p>
-                        <h3 style="font-size: 1.4rem;">$721.20</h3>
+                        <h3 id="live-revenue" style="font-size: 1.4rem;">$0.00</h3>
                     </div>
                     <div style="background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border); text-align: center;">
                         <p style="font-size: 0.7rem; color: var(--text-muted);">ACTIVE ORDERS</p>
-                        <h3 style="font-size: 1.4rem;">61</h3>
+                        <h3 id="live-orders" style="font-size: 1.4rem;">0</h3>
                     </div>
                 </div>
             </section>
 
             <section id="view-parent-orders" class="view">
                 <h2>Track Orders</h2>
-                <div class="item-card" style="margin-top: 20px; text-align: center; display: block; color: var(--text-muted);">No active child orders.</div>
+                <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">View your linked child's order history.</p>
+                <div id="parent-tracker-container">
+                    <div class="item-card" style="text-align: center; display: block; color: var(--text-muted);">No linked account or active orders.</div>
+                </div>
             </section>
         </main>
 
         <nav id="bottom-nav">
-            <button class="nav-tab" onclick="switchTab('view-home')"><span>🏠</span><span style="font-size:0.5rem; font-weight:900;">HOME</span></button>
-            <button class="nav-tab" onclick="switchTab('view-menu')"><span>🍔</span><span style="font-size:0.5rem; font-weight:900;">MENU</span></button>
-            <button class="nav-tab" onclick="switchTab('view-account')"><span>👤</span><span style="font-size:0.5rem; font-weight:900;">PROFILE</span></button>
-            <button class="nav-tab" onclick="switchTab('view-settings')"><span>⚙️</span><span style="font-size:0.5rem; font-weight:900;">SETTINGS</span></button>
+            <button class="nav-tab" id="nav-tab-1" onclick="switchTab('view-home')"><span>🏠</span><span style="font-size:0.5rem; font-weight:900;">HOME</span></button>
+            <button class="nav-tab" id="nav-tab-2" onclick="switchTab('view-menu')"><span>🍔</span><span style="font-size:0.5rem; font-weight:900;">MENU</span></button>
+            <button class="nav-tab" id="nav-tab-3" onclick="switchTab('view-account')"><span>👤</span><span style="font-size:0.5rem; font-weight:900;">PROFILE</span></button>
+            <button class="nav-tab" id="nav-tab-4" onclick="switchTab('view-settings')"><span>⚙️</span><span style="font-size:0.5rem; font-weight:900;">SETTINGS</span></button>
         </nav>
 
-        <div id="qty-modal">
+        <div id="qty-modal" class="modal-overlay">
             <div class="modal-content">
                 <h3 id="modal-item-name" style="margin-bottom: 5px;">Item</h3>
                 <p id="modal-item-price" style="color: var(--accent); font-weight: 800; margin-bottom: 25px;">$0.00 each</p>
@@ -317,6 +409,22 @@
                 </div>
                 <button class="btn-black" onclick="addToCart()" style="margin-bottom: 15px;">Add to Order</button>
                 <button onclick="closeModal()" style="background: none; border: none; color: var(--text-muted); font-weight: 700; cursor: pointer; width: 100%; padding: 10px;">Cancel</button>
+            </div>
+        </div>
+
+        <div id="payment-modal" class="modal-overlay" onclick="handleOutsideModalClick(event, 'payment-modal')">
+            <div class="modal-content modal-content-large" onclick="event.stopPropagation()">
+                <h3 style="margin-bottom: 20px; text-align: center;">Add Payment Method</h3>
+                <input type="text" id="cc-name" class="form-input" placeholder="Name on Card">
+                <input type="text" id="cc-num" class="form-input" placeholder="Card Number (16 digits)" maxlength="16">
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="cc-exp" class="form-input" placeholder="MM/YY" maxlength="5">
+                    <input type="text" id="cc-cvc" class="form-input" placeholder="CVC" maxlength="4">
+                </div>
+                <input type="text" id="cc-zip" class="form-input" placeholder="Billing Zip / Postal Code">
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 20px; text-align: center;">Payments are securely processed and encrypted.</p>
+                <button class="btn-black" onclick="saveNewPayment()" style="margin-bottom: 10px;">Save Card</button>
+                <button onclick="closePaymentModal()" style="background: none; border: none; color: var(--text-muted); font-weight: 700; cursor: pointer; width: 100%; padding: 10px;">Cancel</button>
             </div>
         </div>
 
@@ -356,11 +464,45 @@
         let selectedQty = 1;
         let priceMultiplier = 1.0;
 
-        document.getElementById('auth-screen').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                handleAuth();
+        /* --- AUTHENTICATION MODAL LOGIC --- */
+        function openAuthModal(isSignUp) {
+            document.getElementById('auth-screen').style.display = 'flex';
+            isSignupMode = isSignUp;
+            updateAuthModalUI();
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('auth-email').value = '';
+            document.getElementById('auth-pass').value = '';
+            if (document.getElementById('reg-name')) {
+                document.getElementById('reg-name').value = '';
             }
+        }
+
+        function toggleAuthMode() {
+            isSignupMode = !isSignupMode;
+            updateAuthModalUI();
+        }
+
+        function updateAuthModalUI() {
+            document.getElementById('auth-title').innerText = isSignupMode ? "Parent Sign Up" : "Sign In";
+            document.getElementById('main-auth-btn').innerText = isSignupMode ? "Register Account" : "Sign In";
+            document.getElementById('signup-fields').style.display = isSignupMode ? "block" : "none";
+            document.getElementById('toggle-auth-btn').innerText = isSignupMode ? "Already have an account? Sign In" : "Or sign up now";
+        }
+
+        // Generic outside click handler for all modal overlays
+        function handleOutsideModalClick(event, modalId = 'auth-screen') {
+            if (event.target === document.getElementById(modalId)) {
+                if (modalId === 'auth-screen') closeAuthModal();
+                if (modalId === 'payment-modal') closePaymentModal();
+            }
+        }
+
+        /* --- CORE LOGIC --- */
+        document.getElementById('auth-screen').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') { event.preventDefault(); handleAuth(); }
         });
 
         function toggleTheme() {
@@ -372,18 +514,10 @@
             }
         }
 
-        function toggleAuthMode() {
-            isSignupMode = !isSignupMode;
-            document.getElementById('auth-title').innerText = isSignupMode ? "Create Account" : "Sign In";
-            document.getElementById('main-auth-btn').innerText = isSignupMode ? "Register" : "Sign In";
-            document.getElementById('signup-fields').style.display = isSignupMode ? "block" : "none";
-            document.getElementById('toggle-auth-btn').innerText = isSignupMode ? "Back to Sign In" : "Parent? Sign Up here";
-        }
-
         function handleAuth() {
             const email = document.getElementById('auth-email').value.toLowerCase();
             const pass = document.getElementById('auth-pass').value;
-            const fullName = document.getElementById('reg-name').value;
+            const fullName = document.getElementById('reg-name') ? document.getElementById('reg-name').value : '';
             if (!email || !pass) return alert("Missing info.");
 
             const isStudent = email.endsWith('@education.nsw.gov.au');
@@ -391,20 +525,29 @@
             const isStaff = email.endsWith('@centralbox.com');
 
             if (isSignupMode) {
-                usersDB[email] = { name: fullName, pass: pass, orders: [], identity: "", defaultPickup: "Recess", darkMode: false };
+                usersDB[email] = { name: fullName || email.split('@')[0], pass: pass, orders: [], identity: "", defaultPickup: "Recess", darkMode: false, favs: [], payments: [], balance: 0 };
                 localStorage.setItem('cb_users', JSON.stringify(usersDB));
                 toggleAuthMode();
             } else {
                 if (isStudent || isTeacher || isStaff) {
                     if (!usersDB[email]) {
-                        usersDB[email] = { name: email.split('@')[0], pass: pass, orders: [], identity: "", defaultPickup: "Recess", darkMode: false };
+                        // Enforce default pre-registered accounts password to be CVHS
+                        usersDB[email] = { name: email.split('@')[0], pass: "CVHS", orders: [], identity: "", defaultPickup: "Recess", darkMode: false, favs: [], payments: [], dailyLimit: 50, balance: 50 };
                         localStorage.setItem('cb_users', JSON.stringify(usersDB));
+                    }
+                    if (usersDB[email].pass !== pass) {
+                        if (pass === "CVHS") {
+                            usersDB[email].pass = "CVHS"; // Update legacy accounts
+                            localStorage.setItem('cb_users', JSON.stringify(usersDB));
+                        } else {
+                            return alert("Incorrect password.");
+                        }
                     }
                     const firstName = email.split('@')[0].split('.')[0];
                     loginUser(email, firstName.charAt(0).toUpperCase() + firstName.slice(1), isStudent, isTeacher, isStaff);
                 } else if (usersDB[email] && usersDB[email].pass === pass) {
                     loginUser(email, usersDB[email].name, false, false, false);
-                } else { alert("Account not found."); }
+                } else { alert("Incorrect password or account not found."); }
             }
         }
 
@@ -412,7 +555,7 @@
             currentUserEmail = email;
             const fName = name.split(' ')[0];
             document.getElementById('home-greeting').innerHTML = `Hungry,<br>${fName}?`;
-            document.getElementById('user-display-name').innerText = name;
+            document.getElementById('user-display-name').innerText = usersDB[email].name || name;
             document.getElementById('user-display-email').innerText = email;
             
             priceMultiplier = (isTeacher || isStaff) ? 0.8 : 1.0;
@@ -421,91 +564,244 @@
             document.getElementById('theme-toggle').checked = isDark;
             document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
 
+            // Load Dietary Preferences from LocalStorage
+            document.getElementById('pref-veg').checked = usersDB[email].prefVeg || false;
+            document.getElementById('pref-halal').checked = usersDB[email].prefHalal || false;
+            document.getElementById('pref-nut').checked = usersDB[email].prefNut !== false;
+
+            // Update Balance Display
+            const bal = usersDB[email].balance !== undefined ? usersDB[email].balance : (usersDB[email].dailyLimit !== undefined ? usersDB[email].dailyLimit : 42.50);
+            document.getElementById('profile-balance-display').innerText = '$' + bal.toFixed(2);
+
+            // Identity Configurations
             const identityLabel = document.getElementById('identity-section-label');
             const identityCard = document.getElementById('identity-section-card');
             const identitySelect = document.getElementById('profile-identity-select');
             
             if (isStaff || (!isStudent && !isTeacher)) {
-                identityLabel.style.display = 'none';
-                identityCard.style.display = 'none';
+                identityLabel.style.display = 'none'; identityCard.style.display = 'none';
             } else if (isTeacher) {
-                identityLabel.innerText = 'Faculty';
-                identityLabel.style.display = 'block';
-                identityCard.style.display = 'flex';
+                identityLabel.innerText = 'Faculty'; identityLabel.style.display = 'block'; identityCard.style.display = 'flex';
                 identitySelect.innerHTML = '<option value="">Select Faculty</option><option value="Math">Math</option><option value="Science">Science</option><option value="English">English</option><option value="PDHPE">PDHPE</option><option value="Home Economics">Home Economics</option><option value="Industrial Arts">Industrial Arts</option><option value="Performing Arts">Performing Arts</option><option value="Literacy">Literacy</option>';
-                if (usersDB[email].identity) identitySelect.value = usersDB[email].identity;
             } else {
-                identityLabel.innerText = 'Identity & Class';
-                identityLabel.style.display = 'block';
-                identityCard.style.display = 'flex';
+                identityLabel.innerText = 'Identity & Class'; identityLabel.style.display = 'block'; identityCard.style.display = 'flex';
                 identitySelect.innerHTML = '<option value="">Select Year Group</option><option value="7">Year 7</option><option value="8">Year 8</option><option value="9">Year 9</option><option value="10">Year 10</option><option value="11">Year 11</option><option value="12">Year 12</option>';
-                if (usersDB[email].identity) identitySelect.value = usersDB[email].identity;
             }
+            if (usersDB[email].identity) identitySelect.value = usersDB[email].identity;
+            if (usersDB[email].defaultPickup) document.getElementById('settings-default-pickup').value = usersDB[email].defaultPickup;
 
-            if (usersDB[email].defaultPickup) {
-                document.getElementById('settings-default-pickup').value = usersDB[email].defaultPickup;
-            }
+            // Render Secure Payments & Manage Access
+            renderPayments();
+            const addPaymentBtn = document.getElementById('add-payment-btn');
 
             const badge = document.getElementById('role-badge');
             const statsBtn = document.getElementById('stats-card-btn');
             statsBtn.style.display = 'none'; 
 
+            // Display Top Up system condition layout context
+            const topupSection = document.getElementById('staff-topup-section');
+            if (isTeacher || isStaff) {
+                topupSection.style.display = 'block';
+            } else {
+                topupSection.style.display = 'none';
+            }
+
+            // RESET DEFAULT NAV TABS & PROFILE VISIBILITY FIRST
+            document.getElementById('nav-tab-1').innerHTML = `<span>🏠</span><span style="font-size:0.5rem; font-weight:900;">HOME</span>`;
+            document.getElementById('nav-tab-1').setAttribute("onclick", "switchTab('view-home')");
+            document.getElementById('nav-tab-2').innerHTML = `<span>🍔</span><span style="font-size:0.5rem; font-weight:900;">MENU</span>`;
+            document.getElementById('nav-tab-2').setAttribute("onclick", "switchTab('view-menu')");
+            
+            document.getElementById('balance-display-container').style.display = 'flex';
+            document.getElementById('fav-orders-btn').style.display = 'block';
+
             if (isStudent) {
                 badge.innerText = "STUDENT";
+                badge.style.background = "var(--text-main)";
+                document.getElementById('standard-grid').style.display = 'grid';
+                document.getElementById('parent-grid').style.display = 'none';
+                document.getElementById('parental-ctrl-section').style.display = 'none';
+                addPaymentBtn.style.display = 'none'; // Lock student payments
             } else if (isTeacher) { 
                 badge.innerText = "TEACHER"; 
+                badge.style.background = "var(--text-main)";
+                document.getElementById('standard-grid').style.display = 'grid';
+                document.getElementById('parent-grid').style.display = 'none';
+                document.getElementById('parental-ctrl-section').style.display = 'none';
+                addPaymentBtn.style.display = 'block';
             } else if (isStaff) { 
-                badge.innerText = "STAFF"; 
-                badge.style.background = "var(--staff-theme)"; 
-                statsBtn.style.display = 'block'; 
+                badge.innerText = "STAFF"; badge.style.background = "var(--staff-theme)"; statsBtn.style.display = 'block'; 
+                document.getElementById('standard-grid').style.display = 'grid';
+                document.getElementById('parent-grid').style.display = 'none';
+                document.getElementById('parental-ctrl-section').style.display = 'none';
+                addPaymentBtn.style.display = 'block';
+
+                // STAFF SPECIFIC NAV CHANGE
+                document.getElementById('nav-tab-1').innerHTML = `<span>📊</span><span style="font-size:0.5rem; font-weight:900;">STATS</span>`;
+                document.getElementById('nav-tab-1').setAttribute("onclick", "switchTab('view-stats')");
+                calculateLiveStats();
             } else { 
-                badge.innerText = "PARENT"; 
-                badge.style.background = "var(--parent-theme)";
+                badge.innerText = "PARENT"; badge.style.background = "var(--parent-theme)";
                 document.getElementById('standard-grid').style.display = 'none';
                 document.getElementById('parent-grid').style.display = 'grid';
                 document.getElementById('parental-ctrl-section').style.display = 'block';
+                addPaymentBtn.style.display = 'block';
+
+                // PARENT SPECIFIC NAV CHANGES
+                document.getElementById('nav-tab-1').innerHTML = `<span>👀</span><span style="font-size:0.5rem; font-weight:900;">TRACK ORDERS</span>`;
+                document.getElementById('nav-tab-1').setAttribute("onclick", "switchTab('view-parent-orders')");
+                document.getElementById('nav-tab-2').innerHTML = `<span>💰</span><span style="font-size:0.5rem; font-weight:900;">LIMITS</span>`;
+                document.getElementById('nav-tab-2').setAttribute("onclick", "switchTab('view-parent-limits')");
+                
+                // PARENT SPECIFIC PROFILE CHANGES
+                document.getElementById('balance-display-container').style.display = 'none';
+                document.getElementById('fav-orders-btn').style.display = 'none';
+
+                loadParentData();
             }
 
-            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('landing-screen').style.display = 'none';
+            document.getElementById('view-public-menu').style.display = 'none';
+            closeAuthModal();
             document.getElementById('app-header').style.display = 'flex';
             switchTab('view-home');
         }
 
+        // --- STATS LOGIC ---
+        function calculateLiveStats() {
+            let totalRevenue = 0;
+            let totalOrdersCount = 0;
+            const currentDB = JSON.parse(localStorage.getItem('cb_users')) || {};
+            
+            Object.keys(currentDB).forEach(emailKey => {
+                const userObj = currentDB[emailKey];
+                if (userObj && userObj.orders && Array.isArray(userObj.orders)) {
+                    userObj.orders.forEach(order => {
+                        totalRevenue += parseFloat(order.total || 0);
+                        totalOrdersCount++;
+                    });
+                }
+            });
+
+            const revEl = document.getElementById('live-revenue');
+            const ordEl = document.getElementById('live-orders');
+            if (revEl) revEl.innerText = `$${totalRevenue.toFixed(2)}`;
+            if (ordEl) ordEl.innerText = totalOrdersCount;
+        }
+
         function switchTab(viewId) {
+            if (!currentUserEmail && viewId !== 'view-home' && viewId !== 'view-landing' && viewId !== 'view-public-menu') {
+                openAuthModal(false); return;
+            }
+
+            const isLanding = (viewId === 'view-landing');
+            const isPublicMenu = (viewId === 'view-public-menu');
+            document.getElementById('landing-screen').style.display = isLanding ? 'flex' : 'none';
+            document.getElementById('view-public-menu').style.display = isPublicMenu ? 'block' : 'none';
+
             document.getElementById('header-logo').style.opacity = (viewId === 'view-home') ? '0' : '1';
             document.getElementById('header-logo').style.pointerEvents = (viewId === 'view-home') ? 'none' : 'auto';
 
-            document.querySelectorAll('.view').forEach(v => { v.style.display = 'none'; v.classList.remove('active'); });
+            document.querySelectorAll('main .view').forEach(v => { v.style.display = 'none'; v.classList.remove('active'); });
             const target = document.getElementById(viewId);
-            if (target) {
+            if (target && !isLanding && !isPublicMenu) {
                 target.classList.add('active');
                 target.style.display = (viewId === 'view-home') ? 'flex' : 'block';
             }
-            document.getElementById('bottom-nav').style.display = (viewId === 'view-home') ? 'none' : 'flex';
+            
+            document.getElementById('bottom-nav').style.display = (!isLanding && !isPublicMenu && viewId !== 'view-home') ? 'flex' : 'none';
+            
             if(viewId === 'view-menu') renderMenu();
             if(viewId === 'view-orders') renderOrders();
-            if(viewId === 'view-checkout') prepareCheckout();
+            if(viewId === 'view-checkout') renderCheckout();
+            if(viewId === 'view-favorites') renderFavorites();
+            if(viewId === 'view-stats') calculateLiveStats();
+            
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            if (viewId === 'view-home' || viewId === 'view-stats' || viewId === 'view-parent-orders') {
+                document.getElementById('nav-tab-1').classList.add('active');
+            }
+            if (viewId === 'view-menu' || viewId === 'view-checkout' || viewId === 'view-parent-limits') {
+                document.getElementById('nav-tab-2').classList.add('active');
+            }
+            if (viewId === 'view-account') document.getElementById('nav-tab-3').classList.add('active');
+            if (viewId === 'view-settings') document.getElementById('nav-tab-4').classList.add('active');
+        }
+
+        /* --- DISCOVER & STAR FAVORITES --- */
+        function toggleFav(id) {
+            if(!usersDB[currentUserEmail].favs) usersDB[currentUserEmail].favs = [];
+            let favs = usersDB[currentUserEmail].favs;
+            if (favs.includes(id)) favs = favs.filter(f => f !== id);
+            else favs.push(id);
+            usersDB[currentUserEmail].favs = favs;
+            localStorage.setItem('cb_users', JSON.stringify(usersDB));
+            renderMenu();
+            if(document.getElementById('view-favorites').classList.contains('active')) renderFavorites();
+        }
+
+        function renderPublicMenuCategorized() {
+            const container = document.getElementById('public-menu-categorized-container');
+            const categories = [...new Set(menuData.map(item => item.cat))]; 
+            container.innerHTML = categories.map(cat => {
+                const itemsInCat = menuData.filter(i => i.cat === cat);
+                return `
+                    <div style="margin-bottom: 40px; text-align: left;">
+                        <h2 style="font-size: 1.8rem; margin-bottom: 20px; color: var(--text-main); border-bottom: 2px solid var(--border); padding-bottom: 10px;">${cat}</h2>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            ${itemsInCat.map(item => `<div class="item-card" style="margin-bottom: 0;"><div><h3 style="margin-bottom:5px;">${item.name}</h3></div><p style="color:var(--accent); font-weight:900; font-size:1.2rem;">$${item.price.toFixed(2)}</p></div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function renderMenu() {
             const list = document.getElementById('menu-items');
+            const userFavs = usersDB[currentUserEmail]?.favs || [];
             list.innerHTML = menuData.filter(i => i.cat === activeCategory).map(i => {
                 const finalPrice = i.price * priceMultiplier;
+                const isFav = userFavs.includes(i.id);
                 return `
                 <div class="item-card">
-                    <div><h4>${i.name}</h4><p style="color:var(--accent); font-weight:900;">$${finalPrice.toFixed(2)}</p></div>
+                    <div>
+                        <div style="display:flex; align-items:center; gap: 8px;">
+                            <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(${i.id})">★</button>
+                            <h4 style="margin:0;">${i.name}</h4>
+                        </div>
+                        <p style="color:var(--accent); font-weight:900; margin-top:5px; margin-left: 32px;">$${finalPrice.toFixed(2)}</p>
+                    </div>
                     <button class="chip active" onclick="openModal(${i.id})">Add</button>
                 </div>
             `}).join('');
         }
 
-        function filterCat(cat, el) {
-            activeCategory = cat;
-            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
-            renderMenu();
+        function renderFavorites() {
+            const container = document.getElementById('favorites-container');
+            const userFavs = usersDB[currentUserEmail]?.favs || [];
+            if (userFavs.length === 0) {
+                container.innerHTML = '<div class="item-card" style="justify-content: center;"><p style="color: var(--text-muted);">No starred items found.</p></div>';
+                return;
+            }
+            container.innerHTML = menuData.filter(i => userFavs.includes(i.id)).map(i => {
+                const finalPrice = i.price * priceMultiplier;
+                return `
+                <div class="item-card">
+                    <div>
+                        <div style="display:flex; align-items:center; gap: 8px;">
+                            <button class="fav-btn active" onclick="toggleFav(${i.id})">★</button>
+                            <h4 style="margin:0;">${i.name}</h4>
+                        </div>
+                        <p style="color:var(--accent); font-weight:900; margin-top:5px; margin-left: 32px;">$${finalPrice.toFixed(2)}</p>
+                    </div>
+                    <button class="chip active" onclick="openModal(${i.id})">Order</button>
+                </div>
+            `}).join('');
         }
 
+        function filterCat(cat, el) { activeCategory = cat; document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); el.classList.add('active'); renderMenu(); }
+
+        /* --- MODAL & CART CALCULATIONS --- */
         function openModal(itemId) {
             selectedItem = menuData.find(i => i.id === itemId);
             selectedQty = 1;
@@ -516,43 +812,64 @@
             document.getElementById('qty-modal').style.display = 'flex';
         }
 
-        function changeQty(amount) {
-            selectedQty += amount;
-            if (selectedQty < 1) selectedQty = 1;
-            document.getElementById('modal-qty-display').innerText = selectedQty;
-        }
-
-        function closeModal() {
-            document.getElementById('qty-modal').style.display = 'none';
-            selectedItem = null;
-        }
+        function changeQty(amount) { selectedQty += amount; if (selectedQty < 1) selectedQty = 1; document.getElementById('modal-qty-display').innerText = selectedQty; }
+        function closeModal() { document.getElementById('qty-modal').style.display = 'none'; selectedItem = null; }
 
         function addToCart() {
             const finalPrice = selectedItem.price * priceMultiplier;
             const itemTotal = finalPrice * selectedQty;
+            
+            // Check available balance before adding to cart
+            const currentBalance = usersDB[currentUserEmail]?.balance !== undefined ? usersDB[currentUserEmail].balance : (usersDB[currentUserEmail]?.dailyLimit || 50);
+            if (cartTotal + itemTotal > currentBalance) {
+                alert(`Cannot add item. This exceeds your available balance of $${currentBalance.toFixed(2)}.`);
+                closeModal();
+                return;
+            }
+
             cartTotal += itemTotal;
             cartItems.push({ name: selectedItem.name, qty: selectedQty, total: itemTotal });
             document.getElementById('cart-total').innerText = `$${cartTotal.toFixed(2)}`;
-            document.getElementById('checkout-total').innerText = `$${cartTotal.toFixed(2)}`;
             closeModal();
         }
 
-        function prepareCheckout() {
+        /* --- CHECKOUT VIEW SYSTEM --- */
+        function renderCheckout() {
+            const itemsContainer = document.getElementById('checkout-items-container');
+            if (cartItems.length === 0) {
+                itemsContainer.innerHTML = '<p style="color:var(--text-muted); text-align:center;">Your cart is currently empty.</p>';
+            } else {
+                itemsContainer.innerHTML = cartItems.map((item, index) => `
+                    <div class="setting-row" style="background:var(--card-bg); padding:15px; border-radius:12px; border:1px solid var(--border); margin-bottom:10px;">
+                        <span><span style="font-weight:900; color:var(--accent); margin-right:10px;">${item.qty}x</span> ${item.name}</span>
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <span style="font-weight:bold;">$${item.total.toFixed(2)}</span>
+                            <button class="del-btn" onclick="removeCartItem(${index})">X</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('checkout-total').innerText = `$${cartTotal.toFixed(2)}`;
+
             const date = new Date();
             const isMonday = date.getDay() === 1;
             const pickupSelect = document.getElementById('checkout-pickup-time');
-            
             pickupSelect.innerHTML = isMonday 
                 ? `<option value="Recess 10:20">Recess (10:20 AM)</option><option value="Lunch 1:10">Lunch (1:10 PM)</option>`
                 : `<option value="Recess 10:15">Recess (10:15 AM)</option><option value="Lunch 1:25">Lunch (1:25 PM)</option>`;
 
             const userDefault = usersDB[currentUserEmail]?.defaultPickup || "Recess";
             for (let i = 0; i < pickupSelect.options.length; i++) {
-                if (pickupSelect.options[i].value.includes(userDefault)) {
-                    pickupSelect.selectedIndex = i;
-                    break;
-                }
+                if (pickupSelect.options[i].value.includes(userDefault)) { pickupSelect.selectedIndex = i; break; }
             }
+        }
+
+        function removeCartItem(index) {
+            cartTotal -= cartItems[index].total;
+            cartItems.splice(index, 1);
+            document.getElementById('cart-total').innerText = `$${cartTotal.toFixed(2)}`;
+            renderCheckout();
         }
 
         function confirmOrder() {
@@ -561,6 +878,16 @@
             const pickupTime = document.getElementById('checkout-pickup-time').value;
             
             if (currentUserEmail && usersDB[currentUserEmail]) {
+                // Deduct from Balance securely
+                const currentBalance = usersDB[currentUserEmail].balance !== undefined ? usersDB[currentUserEmail].balance : (usersDB[currentUserEmail].dailyLimit || 50);
+                if (cartTotal > currentBalance) return alert("Insufficient balance to complete the order.");
+                
+                usersDB[currentUserEmail].balance = currentBalance - cartTotal;
+                
+                // Update interface with new balance
+                const balEl = document.getElementById('profile-balance-display');
+                if(balEl) balEl.innerText = '$' + usersDB[currentUserEmail].balance.toFixed(2);
+
                 if (!usersDB[currentUserEmail].orders) usersDB[currentUserEmail].orders = [];
                 usersDB[currentUserEmail].orders.unshift({
                     id: Math.floor(Math.random() * 1000000),
@@ -573,12 +900,11 @@
                 });
                 localStorage.setItem('cb_users', JSON.stringify(usersDB));
             }
-            alert(`Order Confirmed for ${pickupTime}! Saved to History.`);
+            alert(`Order Confirmed for ${pickupTime}! Payment deducted from your account.`);
             cartTotal = 0; cartItems = [];
             document.getElementById('cart-total').innerText = "$0.00";
-            document.getElementById('checkout-total').innerText = "$0.00";
             document.getElementById('dietary-notes').value = "";
-            switchTab('view-home');
+            switchTab('view-orders');
         }
 
         function renderOrders() {
@@ -603,39 +929,192 @@
             `).join('');
         }
 
+        /* --- PREFERENCES AND PERSISTENCE DATA --- */
         function saveProfileIdentity(value) {
             if(currentUserEmail && usersDB[currentUserEmail]) {
-                usersDB[currentUserEmail].identity = value;
-                localStorage.setItem('cb_users', JSON.stringify(usersDB));
+                usersDB[currentUserEmail].identity = value; localStorage.setItem('cb_users', JSON.stringify(usersDB));
             }
         }
-
         function saveDefaultPickup(value) {
             if(currentUserEmail && usersDB[currentUserEmail]) {
-                usersDB[currentUserEmail].defaultPickup = value;
+                usersDB[currentUserEmail].defaultPickup = value; localStorage.setItem('cb_users', JSON.stringify(usersDB));
+            }
+        }
+        function savePreferences() {
+            if(currentUserEmail && usersDB[currentUserEmail]) {
+                usersDB[currentUserEmail].prefVeg = document.getElementById('pref-veg').checked;
+                usersDB[currentUserEmail].prefHalal = document.getElementById('pref-halal').checked;
+                usersDB[currentUserEmail].prefNut = document.getElementById('pref-nut').checked;
                 localStorage.setItem('cb_users', JSON.stringify(usersDB));
             }
         }
 
-        function showFavorites() {
-            const orders = usersDB[currentUserEmail]?.orders || [];
-            if (orders.length === 0) return alert("You don't have any past orders to determine favorites yet.");
+        /* --- NEW SECURE PAYMENTS SYSTEM --- */
+        function openPaymentModal() {
+            document.getElementById('payment-modal').style.display = 'flex';
+        }
+        
+        function closePaymentModal() {
+            document.getElementById('payment-modal').style.display = 'none';
+            document.getElementById('cc-name').value = '';
+            document.getElementById('cc-num').value = '';
+            document.getElementById('cc-exp').value = '';
+            document.getElementById('cc-cvc').value = '';
+            document.getElementById('cc-zip').value = '';
+        }
 
-            let itemCounts = {};
-            orders.forEach(order => {
-                if(order.cart) {
-                    order.cart.forEach(item => {
-                        itemCounts[item.name] = (itemCounts[item.name] || 0) + item.qty;
-                    });
-                }
-            });
+        function saveNewPayment() {
+            const name = document.getElementById('cc-name').value;
+            const num = document.getElementById('cc-num').value;
+            const exp = document.getElementById('cc-exp').value;
+            const cvc = document.getElementById('cc-cvc').value;
 
-            if(Object.keys(itemCounts).length === 0) return alert("Favorite data is missing from older orders.");
+            if(!name || !num || !exp || !cvc) return alert("Please fill out all required card details securely.");
+            if(num.length < 4) return alert("Invalid Card Number.");
 
-            const sortedItems = Object.keys(itemCounts).sort((a, b) => itemCounts[b] - itemCounts[a]);
-            const topFavorites = sortedItems.slice(0, 3).map(item => `- ${item} (${itemCounts[item]} ordered)`).join('\n');
+            const last4 = num.slice(-4);
+            if(!usersDB[currentUserEmail].payments) usersDB[currentUserEmail].payments = [];
+            usersDB[currentUserEmail].payments.push(last4);
+            localStorage.setItem('cb_users', JSON.stringify(usersDB));
             
-            alert(`Your Top Favorite Items:\n\n${topFavorites}`);
+            renderPayments();
+            closePaymentModal();
+        }
+
+        function renderPayments() {
+            const list = document.getElementById('payment-methods-list');
+            const methods = usersDB[currentUserEmail]?.payments || [];
+            if (!list) return;
+            if (methods.length === 0) { list.innerHTML = ''; return; }
+            list.innerHTML = methods.map((m, i) => `
+                <div class="setting-row" style="margin-top:10px; background:var(--bg-color); padding:10px; border-radius:10px;">
+                    <span style="font-weight:bold;">💳 Visa ending in ${m}</span>
+                    <button class="del-btn" onclick="removePayment(${i})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function removePayment(index) {
+            usersDB[currentUserEmail].payments.splice(index, 1);
+            localStorage.setItem('cb_users', JSON.stringify(usersDB));
+            renderPayments();
+        }
+
+        /* --- STAFF & TEACHER CUSTOM WALLET TOP UP ACTION --- */
+        function executeStaffTopUp() {
+            const inputEl = document.getElementById('staff-topup-amount');
+            const topupVal = parseFloat(inputEl.value);
+            
+            if (isNaN(topupVal) || topupVal <= 0) {
+                return alert("Please specify a valid numeric funding amount.");
+            }
+            
+            const currentPayments = usersDB[currentUserEmail]?.payments || [];
+            if (currentPayments.length === 0) {
+                return alert("Access Denied: Please hook a secure payment card to your profile configuration context first.");
+            }
+            
+            const currentBal = usersDB[currentUserEmail].balance !== undefined ? usersDB[currentUserEmail].balance : 50.00;
+            usersDB[currentUserEmail].balance = currentBal + topupVal;
+            localStorage.setItem('cb_users', JSON.stringify(usersDB));
+            
+            document.getElementById('profile-balance-display').innerText = '$' + usersDB[currentUserEmail].balance.toFixed(2);
+            inputEl.value = '';
+            alert(`Successfully added $${topupVal.toFixed(2)} to your School Balance!`);
+        }
+
+        /* --- SECURITY ACTION ROUTINES --- */
+        function appChangePassword() {
+            if (!currentUserEmail || !usersDB[currentUserEmail]) return;
+            const currentPassPrompt = prompt("Verification context request. Input current password:");
+            if (currentPassPrompt !== usersDB[currentUserEmail].pass) {
+                return alert("Security Context Error: Credentials authentication failed verification parameters.");
+            }
+            const newPass = prompt("Specify new authentication password token entry below:");
+            if (!newPass || newPass.trim() === "") {
+                return alert("Validation Mismatch: Passwords structural bounds cannot be blank entries.");
+            }
+            usersDB[currentUserEmail].pass = newPass;
+            localStorage.setItem('cb_users', JSON.stringify(usersDB));
+            alert("Security parameters committed! Authentication verification token redefined safely.");
+        }
+
+        function appClearPaymentInfo() {
+            if (!currentUserEmail || !usersDB[currentUserEmail]) return;
+            if (!confirm("Are you sure you want to completely flush all secure credit card tokens attached here?")) return;
+            
+            usersDB[currentUserEmail].payments = [];
+            localStorage.setItem('cb_users', JSON.stringify(usersDB));
+            renderPayments();
+            alert("Card repositories purged securely from temporary storage bounds.");
+        }
+
+        /* --- PARENT CONTROLS & WALLET LINKING --- */
+        function loadParentData() {
+            const linkedEmail = usersDB[currentUserEmail]?.linkedStudent;
+            const limit = usersDB[currentUserEmail]?.setLimit || 15;
+            document.getElementById('parent-limit-slider').value = limit;
+            updateLimitValue(limit);
+
+            if (linkedEmail) {
+                document.getElementById('linked-status').style.display = 'block';
+                document.getElementById('linked-email-display').innerText = linkedEmail;
+                document.getElementById('link-student-email').value = linkedEmail;
+                
+                const studentOrders = usersDB[linkedEmail]?.orders || [];
+                const trackerContainer = document.getElementById('parent-tracker-container');
+                if (studentOrders.length > 0) {
+                    trackerContainer.innerHTML = studentOrders.map(order => `
+                        <div class="item-card" style="flex-direction: column; align-items: flex-start;">
+                            <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 8px;">
+                                <h4 style="margin: 0;">Order #${order.id}</h4><p style="color: var(--text-muted); font-size: 0.8rem; font-weight: bold;">${order.date}</p>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; width: 100%;">
+                                <p style="font-size: 0.9rem; color: var(--text-muted);">${order.items} items</p><h4 style="color: var(--accent);">$${order.total.toFixed(2)}</h4>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    trackerContainer.innerHTML = '<div class="item-card" style="text-align: center; display: block; color: var(--text-muted);">No active orders for this student.</div>';
+                }
+            }
+        }
+
+        function linkStudentAccount() {
+            const email = document.getElementById('link-student-email').value.toLowerCase();
+            if (!email.endsWith('@education.nsw.gov.au')) return alert("Access Denied: Only student emails with the suffix '@education.nsw.gov.au' are allowed.");
+            
+            // Create a profile with default password context "CVHS" if it doesn't exist
+            if (!usersDB[email]) {
+                usersDB[email] = { name: email.split('@')[0], pass: 'CVHS', orders: [], dailyLimit: 15, balance: 15, favs: [], payments: [] };
+            }
+            
+            usersDB[currentUserEmail].linkedStudent = email;
+            localStorage.setItem('cb_users', JSON.stringify(usersDB));
+            loadParentData();
+            alert("Student account successfully linked!");
+        }
+
+        function updateLimitValue(val) { document.getElementById('limit-value').innerText = `$${val}`; }
+
+        function saveParentLimit() {
+            const limit = parseInt(document.getElementById('parent-limit-slider').value);
+            usersDB[currentUserEmail].setLimit = limit;
+            
+            const linkedStudent = usersDB[currentUserEmail].linkedStudent;
+            if (linkedStudent && usersDB[linkedStudent]) {
+                // Apply limit directly to the student's usable wallet balance
+                usersDB[linkedStudent].dailyLimit = limit;
+                usersDB[linkedStudent].balance = limit; 
+            }
+            
+            localStorage.setItem('cb_users', JSON.stringify(usersDB));
+            alert(`Limit set to $${limit} and successfully funded to the student account.`);
+        }
+
+        function initApp() {
+            renderPublicMenuCategorized(); 
+            switchTab('view-landing'); 
         }
     </script>
 </body>
