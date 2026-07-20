@@ -3,11 +3,11 @@ Justin Huynh's Computing Technology Assessment
 
 ## How to:
 **The sign in logic works as follows:**
-- For a Student, the email prefix should be "@education.nsw.gov.au"
-- For a Teacher, the email prefix should be "@det.nsw.edu.au"
-- For a staff member, the email prefix should be "@centralbox.com"
+- For a Student, the domain (email suffix) should be "@education.nsw.gov.au"
+- For a Teacher, the domain (email suffix) should be "@det.nsw.edu.au"
+- For a staff member, the domain (email suffix) should be "@centralbox.com"
 - **These email prefixes are PRE-REGISTERED. Thus, using the password "CVHS" to login.**
-- For a parent, every other email prefix will work. However, they will have to sign up.
+- For a parent, every other domain (email suffix) will work. However, they will have to sign up beforehand.
 
 Additionally, depending on what version of the site the user is on, some features are added or removed.
 ## Key Functional Differences:
